@@ -1,55 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define MAX_RECORD 10
 
 struct Record{
     int id;
     char name[50];
     int age;
-    float gwa;
     char course[50];
+    float dsa;
+    float oop;
+    float fundamentals;
 };
 
-struct Record records[10] = {
-    {1, "Jessa Ugpo", 20, 2.1, "Computer Science"},
-    {2, "Angel June Terec", 20, 1.9, "Computer Science"},
-    {3, "Cherry Mae Inguito", 21, 1.8, "Computer Science"},
-    {4, "James Walter Dacaldacal", 20, 3.0, "Civil Engineering"},
-    {5, "Jaylloyd Bayud", 22, 3.5, "Civil Engineering"},
-    {6, "Rolan Galvadores", 20, 1.7, "Drafting Technology"},
-    {7, "Gian Pilongo", 20, 3.0, "Electrical Engineering"},
-    {8, "Niel Angelo Rico Doyugan", 20, 2.0, "Computer Science"},
-    {9, "Kenneth Tangcawan", 20, 1.3, "Drafting Technology"},
-    {10, "Jonn Hotz Silva", 20, 2.0, "Mechanical Technology"}
-};
+int recordSize = 0;
+struct Record records[MAX_RECORD] = {0};
 
-void sortByGwa(int size){
-    struct Record temp;
+void addStudentRecord(int *size){
 
-    for(int i=0; i<size-1;i++){
-        for(int j=0; j<size-i-1;j++){
-            if(records[j].gwa > records[j+1].gwa){
-                temp = records[j];
-                records[j] = records[j+1];
-                records[j+1] = temp;
-            }
-        }
+    int numToAdd;
+
+    printf("Enter the number of student to add: ");
+    scanf("%d", &numToAdd);
+
+    if (*size + numToAdd > MAX_RECORD) {
+        printf("===============================================================================\n");
+        printf("Not enough space! You can only add %d more students.\n", MAX_RECORD - *size);
+        printf("===============================================================================\n");
+        return;
     }
 
-    printf("- Sorted records by their GWA -\n");
+    for (int i = 0; i < numToAdd; i++) {
+        printf("===============================================================================\n");
+        printf("- Adding Student %d -\n", *size + 1);
+        records[*size].id = *size + 1;
+
+        getchar();
+
+        printf("Enter Student Name: ");
+        scanf(" %[^\n]", records[*size].name);
+        printf("Enter Student Age: ");
+        scanf("%d", &records[*size].age);
+
+        getchar();
+        strcpy(records[*size].course, "BSCS");
+
+        printf("Enter grade for Data Structure and Algorithms: ");
+        scanf("%f", &records[*size].dsa);
+        printf("Enter grade for Object Oriented Programming: ");
+        scanf("%f", &records[*size].oop);
+        printf("Enter grade for Fundamentals of Programming: ");
+        scanf("%f", &records[*size].fundamentals);
+        
+        (*size)++;
+        printf("===============================================================================\n");
+        printf("Student record added successfully!\n");
+        printf("===============================================================================\n\n");
+    }
 }
 
 
 void displayStudents(int size){
+
+    if(size == 0){
+        printf("===============================================================================\n");
+        printf("No student records found.\n");
+        printf("===============================================================================\n\n");
+        return;
+    }
+
     printf("- Display students -\n");
 
+    printf("===============================================================================\n");
     for(int i=0;i<size;i++){
-        char *status = (records[i].gwa <= 3.0 && records[i].gwa >= 1.0) ? "PASSED" : "FAILED";
+        char *statusDSA = (records[i].dsa <= 3.0 && records[i].dsa >= 1.0) ? "PASSED" : "FAILED";
+        char *statusOOP = (records[i].oop <= 3.0 && records[i].oop >= 1.0) ? "PASSED" : "FAILED";
+        char *statusFundamentals = (records[i].fundamentals <= 3.0 && records[i].fundamentals >= 1.0) ? "PASSED" : "FAILED";
 
         printf("ID: %d\n", records[i].id);
         printf("Name: %s\n", records[i].name);
         printf("Age: %d\n", records[i].age);
-        printf("GWA: %.1f\tStatus: %s\n", records[i].gwa, status);
         printf("Course: %s\n", records[i].course);
+        printf("- - Grades - -\n");
+        printf("Data Structure and Algorithms: %.1f\tStatus: %s\n", records[i].dsa, statusDSA);
+        printf("Object Oriented Programming:   %.1f\tStatus: %s\n", records[i].oop, statusOOP);
+        printf("Fundamentals of Programming:   %.1f\tStatus: %s\n", records[i].fundamentals, statusFundamentals);
+        printf("===============================================================================\n");
         printf("\n");
     }
 }
@@ -64,22 +99,32 @@ void searchStudent(size){
     printf("\n");
 
     for(int i=0; i<size;i++){
-        char *status = (records[i].gwa <= 3.0 && records[i].gwa >= 1.0) ? "PASSED" : "FAILED";
+        char *statusDSA = (records[i].dsa <= 3.0 && records[i].dsa >= 1.0) ? "PASSED" : "FAILED";
+        char *statusOOP = (records[i].oop <= 3.0 && records[i].oop >= 1.0) ? "PASSED" : "FAILED";
+        char *statusFundamentals = (records[i].fundamentals <= 3.0 && records[i].fundamentals >= 1.0) ? "PASSED" : "FAILED";
+
         if(strcmp(records[i].name, searchName) == 0){
             found = 1;
+            printf("===============================================================================\n");
             printf("Student found.\n");
             printf("ID: %d\n", records[i].id);
             printf("Name: %s\n", records[i].name);
-            printf("GWA: %d\n", records[i].age);
-            printf("Grade: %.1f\tStatus: %s\n", records[i].gwa,status);
+            printf("Age: %d\n", records[i].age);
             printf("Course: %s\n", records[i].course);
+            printf("- - Grades - -\n");
+            printf("Data Structure and Algorithms: %.1f\tStatus: %s\n", records[i].dsa, statusDSA);
+            printf("Object Oriented Programming:   %.1f\tStatus: %s\n", records[i].oop, statusOOP);
+            printf("Fundamentals of Programming:   %.1f\tStatus: %s\n", records[i].fundamentals, statusFundamentals);
+            printf("===============================================================================\n");
             printf("\n");
             break;
         }
     }
 
     if(found == 0){
-        printf("No information for the student.\n\n");
+        printf("===============================================================================\n");
+        printf("No information for the student.\n");
+        printf("===============================================================================\n\n");
         return;
     }
 }
@@ -100,7 +145,9 @@ void deleteStudent(int *size){
     }
 
     if(index == -1){
+        printf("===============================================================================\n");
         printf("Student with the name of %s not found.\n\n", deleteName);
+        printf("===============================================================================\n");
         return;
     }
 
@@ -109,74 +156,55 @@ void deleteStudent(int *size){
     }
 
     (*size)--;
-
+    printf("===============================================================================\n");
     printf("Student with the name of %s deleted successfully.\n\n", deleteName);
-
-}
-
-void displayStudentChoice(int size){
-    int choice;
-
-    printf("- Display choice -\n");
-    printf("[1] Sorted By GWA\n");
-    printf("[2] Display By ID\n");
-    printf("> Enter choice: ");
-    scanf("%d", &choice);
-
-    switch(choice){
-        case 1:
-            sortByGwa(size);
-            displayStudents(size);
-            break;
-        case 2:
-            displayStudents(size);
-            break;
-        default:
-            printf("Invalid choice. Select (1-2) choices only\n\n");
-
-    }
+    printf("===============================================================================\n");
 
 }
 
 void program(){
     int choice = 0;
     struct Record record;
-    int size = sizeof(records)/sizeof(records[0]);
+    int size = 0;
 
     do{
         printf("- Menu -\n");
-        printf("[1] Show students\n");
-        printf("[2] Search student\n");
-        printf("[3] Delete student\n");
-        printf("[4] Exit program\n");
-        printf("> Enter choice(1-4): ");
+        printf("[1] Add student records\n");
+        printf("[2] Show student records\n");
+        printf("[3] Search student record\n");
+        printf("[4] Delete student record\n");
+        printf("[5] Exit program\n");
+        printf("> Enter choice(1-5): ");
         scanf("%d", &choice);
         printf("\n");
 
         switch(choice){
             case 1:
-                displayStudentChoice(size);
+                addStudentRecord(&size);
                 break;
             case 2:
-                searchStudent(size);
+                displayStudents(size);
                 break;
             case 3:
-                deleteStudent(&size);
+                searchStudent(size);
                 break;
             case 4:
+                deleteStudent(&size);
+                break;
+            case 5:
                 printf("At your service sir D.\n");
                 exit(0);
                 break;
             default:
-                printf("Invalid choice. Select (1-4) choices only.\n\n");
+                printf("Invalid choice. Select (1-5) choices only.\n\n");
         }
 
-    } while (choice != 4);
+    } while (choice != 5);
 }
 
 int main(){
 
-    printf("- - - Students Record - - -\n\n");
+    printf("- - - Record of BSCS Students- - -\n\n");
 
     program();
 
